@@ -1,0 +1,43 @@
+{
+	"assets": [
+		{
+			"waterschap": {
+				"name": "Zuiderzeeland",
+				"code": "WZZ"
+			},
+			"url": "https://services.arcgis.com/84oM5NriBghHdQ3Z/ArcGIS/rest/services/",
+			"assets": [
+				{
+					"asset": "stuw",
+					"location": "Stuw/FeatureServer/0"
+				}
+			]
+		},
+		{
+			"waterschap": {
+				"name": "Limburg",
+				"code": "WL"
+			},
+			"url": "https://maps.waterschaplimburg.nl/arcgis/rest/services/",
+			"assets": [
+				{
+					"asset": "stuw",
+					"location": "Kernregistratie/Kern_Kunstwerken/MapServer/89"
+				}
+			]
+		},
+		{
+			"waterschap": {
+				"name": "Aa en Maas",
+				"code": "WAA"
+			},
+			"url": "https://gisservices.aaenmaas.nl/arcgis/rest/services/",
+			"assets": [
+				{
+					"asset": "stuw",
+					"location": "EXTERN/Kunstwerken_B/FeatureServer/14"
+				}
+			]
+		}
+	]
+}
