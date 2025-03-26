@@ -1,0 +1,140 @@
+@prefix : <http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sulo: <https://w3id.org/sulo> .
+@base <http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/> .
+
+<http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO> rdf:type owl:Ontology ;
+                                                               owl:imports <https://w3id.org/sulo/sulo.ttl> .
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/ConstructieHoogte
+:ConstructieHoogte rdf:type owl:Class ;
+                   rdfs:subClassOf :Hoogte ;
+                   rdfs:comment "De maatgevende hoogte van de constructie"@nl ;
+                   rdfs:label "ConstructieHoogte"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/HoofdFunctieStuw
+:HoofdFunctieStuw rdf:type owl:Class ;
+                  rdfs:subClassOf <https://w3id.org/sulo/Role> ;
+                  rdfs:comment "Aanduiding van de primaire, water-regulerende functie van de stuw."@nl ;
+                  rdfs:label "HoofdFunctieStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Hoogte
+:Hoogte rdf:type owl:Class ;
+        rdfs:subClassOf <https://w3id.org/sulo/Quantity> ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                          owl:someValuesFrom <https://w3id.org/sulo/Unit>
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasValue> ;
+                          owl:allValuesFrom xsd:float
+                        ] ;
+        rdfs:label "Height"@en ,
+                   "Hoogte"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KerendeHoogte
+:KerendeHoogte rdf:type owl:Class ;
+               rdfs:subClassOf :Hoogte ;
+               rdfs:comment "Kerende hoogte van het kunstwerk"@nl ;
+               rdfs:label "KerendeHoogte"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Kunstwerk
+:Kunstwerk rdf:type owl:Class ;
+           rdfs:subClassOf <https://w3id.org/sulo/SpatialObject> ;
+           rdfs:label "Kunstwerk"@nl ,
+                      "Structure"@en .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/NevenFunctieStuw
+:NevenFunctieStuw rdf:type owl:Class ;
+                  rdfs:subClassOf <https://w3id.org/sulo/Role> ;
+                  rdfs:comment "Aanduiding van de functie van de stuw die niet water-regulerend is"@nl ;
+                  rdfs:label "NevenFunctieStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Richting
+:Richting rdf:type owl:Class ;
+          rdfs:subClassOf <https://w3id.org/sulo/Quantity> ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty <https://w3id.org/sulo/hasValue> ;
+                            owl:allValuesFrom xsd:float
+                          ] ;
+          rdfs:comment "een geografische oriëntatie ten behoeve van het maken van kaarten"@nl ;
+          rdfs:label "Orientation"@en ,
+                     "Richting"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/SchuifStuw
+:SchuifStuw rdf:type owl:Class ;
+            rdfs:subClassOf :Stuw ;
+            rdfs:comment "Een stuw met een beweegbare schuif, die dient om de waterstand of debiet te regelen."@nl ;
+            rdfs:label "SchuifStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Stuw
+:Stuw rdf:type owl:Class ;
+      rdfs:subClassOf :Kunstwerk ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:someValuesFrom :WaterstandRegulatieVermogen
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :ConstructieHoogte
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :HoofdFunctieStuw
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :KerendeHoogte
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :NevenFunctieStuw
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Richting
+                      ] ;
+      rdfs:label "DamOrWeir"@en ,
+                 "Stuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/WaterstandRegulatieVermogen
+:WaterstandRegulatieVermogen rdf:type owl:Class ;
+                             rdfs:subClassOf <https://w3id.org/sulo/Capability> ;
+                             rdfs:comment "Het actief beïnvloeden van de hoogte van het wateroppervlak."@nl ;
+                             rdfs:label "WaterstandRegulatieVermogen"@nl .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/mNAP
+:mNAP rdf:type owl:NamedIndividual ,
+               <https://w3id.org/sulo/Unit> ;
+      rdfs:comment "De hoogte in meters ten opzichte van NAP" ;
+      rdfs:label "m+NAP" .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
