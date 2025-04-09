@@ -3,6 +3,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix aquo: <https://www.aquo.nl/index.php/Speciaal:RDFExporteren/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sulo: <https://w3id.org/sulo> .
 @base <http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/> .
@@ -14,54 +15,802 @@
 #    Classes
 #################################################################
 
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#AanliggendeEigenaar
+:AanliggendeEigenaar rdf:type owl:Class ;
+                     rdfs:subClassOf :Organization .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#BodemhoogteBenedenstrooms
+:BodemhoogteBenedenstrooms rdf:type owl:Class ;
+                           rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                           rdfs:comment "De maatgevende bodemhoogte van het object aan de benedenstroomse zijde."@nl ;
+                           rdfs:label "BodemhoogteBenedenstrooms"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#BodemhoogteBovenstrooms
+:BodemhoogteBovenstrooms rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                         rdfs:comment "De maatgevende bodemhoogte van het object aan de bovenstroomse zijde."@nl ;
+                         rdfs:label "BodemhoogteBovenstrooms"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#Gemeente
+:Gemeente rdf:type owl:Class ;
+          rdfs:subClassOf :Organization .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#Hyperlink
+:Hyperlink rdf:type owl:Class ;
+           rdfs:subClassOf <https://w3id.org/sulo/InformationObject> ;
+           rdfs:comment "Verwijzing naar een bron(document) waarin nadere informatie omtrent het object is vastgelegd."@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#Onderhoud
+:Onderhoud rdf:type owl:Class ;
+           rdfs:subClassOf <https://w3id.org/sulo/Process> ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty <https://w3id.org/sulo/hasParticipant> ;
+                             owl:someValuesFrom :OnderhoudsObject
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty <https://w3id.org/sulo/hasParticipant> ;
+                             owl:someValuesFrom :OnderhoudsPlichtige
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Opmerking
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty <https://w3id.org/sulo/isReferredIn> ;
+                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Hyperlink
+                           ] .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#OnderhoudsObject
+:OnderhoudsObject rdf:type owl:Class ;
+                  rdfs:subClassOf <https://w3id.org/sulo/Role> ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/isFeatureOf> ;
+                                    owl:someValuesFrom [ rdf:type owl:Class ;
+                                                         owl:unionOf ( :Aquaduct
+                                                                       :Brug
+                                                                       :Coupure
+                                                                       :DuikerSifonHevel
+                                                                       :Gemaal
+                                                                       :Put
+                                                                       :Sluis
+                                                                       :Stuw
+                                                                       :VasteDam
+                                                                       :VisPassage
+                                                                       :Vuilvang
+                                                                       :Zandvang
+                                                                     )
+                                                       ]
+                                  ] ;
+                  rdfs:comment "Hetgeen dat onderhouden wordt"@nl ;
+                  rdfs:label "OnderhoudsObject"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#OnderhoudsPlichtige
+:OnderhoudsPlichtige rdf:type owl:Class ;
+                     rdfs:subClassOf <https://w3id.org/sulo/Role> ,
+                                     [ rdf:type owl:Restriction ;
+                                       owl:onProperty <https://w3id.org/sulo/isFeatureOf> ;
+                                       owl:someValuesFrom :Organization
+                                     ] .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#Opmerking
+:Opmerking rdf:type owl:Class ;
+           rdfs:subClassOf <https://w3id.org/sulo/InformationObject> ;
+           rdfs:comment "Comment"@nl ;
+           rdfs:label "Opmerking"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#Organization
+:Organization rdf:type owl:Class ;
+              rdfs:subClassOf <https://w3id.org/sulo/Object> .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#Provincie
+:Provincie rdf:type owl:Class ;
+           rdfs:subClassOf :Organization .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#Ruwheid
+:Ruwheid rdf:type owl:Class ;
+         rdfs:subClassOf <https://w3id.org/sulo/Quantity> ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                           owl:someValuesFrom :RuwheidMethode
+                         ] ;
+         rdfs:comment "Maat voor de weerstand die het stromend water ondervindt van het materiaal en door de vorm van de constructie, uitgedrukt in de eenheid die past bij de typeMethodeRuwheid."@nl ;
+         rdfs:label "Ruwheid"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#RuwheidMethode
+:RuwheidMethode rdf:type owl:Class ;
+                rdfs:subClassOf <https://w3id.org/sulo/Quality> .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO#Waterschap
+:Waterschap rdf:type owl:Class ;
+            rdfs:subClassOf :Organization .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Aalpijp
+:Aalpijp rdf:type owl:Class ;
+         rdfs:subClassOf :VisPassage ;
+         rdfs:comment "Een vispassage in de vorm van een pijp of goot, waarmee de glasaal van een zout- naar een zoetwaterleefgebied kan trekken"@nl ;
+         rdfs:label "Aalpijp"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AantalKunstwerkopeningen
+:AantalKunstwerkopeningen rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                          rdfs:label "AantalKunstwerkopeningen"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel
+:AfsluitMiddel rdf:type owl:Class ;
+               rdfs:subClassOf :Kunstwerk ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                 owl:someValuesFrom :BreedteOpening
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                 owl:someValuesFrom :HoogteOpening
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                 owl:someValuesFrom :Regelbaarheid
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                                 owl:someValuesFrom :KunstwerkMateriaal
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty <https://w3id.org/sulo/isPartOf> ;
+                                 owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onClass [ rdf:type owl:Class ;
+                                               owl:unionOf ( :Coupure
+                                                             :DuikerSifonHevel
+                                                             :Gemaal
+                                                             :Sluis
+                                                             :Tunnel
+                                                             :VisPassage
+                                                           )
+                                             ]
+                               ] ;
+               rdfs:comment "Een kunstwerk element dat wordt gebruikt om de waterstroom door een kunstwerk te reguleren."@nl ;
+               rdfs:label "AfsluitMiddel"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-Balg
+:AfsluitMiddel-Balg rdf:type owl:Class ;
+                    rdfs:subClassOf :AfsluitMiddel ;
+                    rdfs:label "Balg"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-Deur
+:AfsluitMiddel-Deur rdf:type owl:Class ;
+                    rdfs:subClassOf :AfsluitMiddel ;
+                    rdfs:label "Deur"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-Overig
+:AfsluitMiddel-Overig rdf:type owl:Class ;
+                      rdfs:subClassOf :AfsluitMiddel ;
+                      rdfs:label "Overig"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-Schotbalk
+:AfsluitMiddel-Schotbalk rdf:type owl:Class ;
+                         rdfs:subClassOf :AfsluitMiddel ;
+                         rdfs:label "Schotbalk"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-Schuif
+:AfsluitMiddel-Schuif rdf:type owl:Class ;
+                      rdfs:subClassOf :AfsluitMiddel ;
+                      rdfs:label "Schuif"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-StuwKlep
+:AfsluitMiddel-StuwKlep rdf:type owl:Class ;
+                        rdfs:subClassOf :AfsluitMiddel ;
+                        rdfs:label "StuwKlep"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-TerugslagKlep
+:AfsluitMiddel-TerugslagKlep rdf:type owl:Class ;
+                             rdfs:subClassOf :AfsluitMiddel ;
+                             rdfs:label "TerugslagKlep"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-TolKlep
+:AfsluitMiddel-TolKlep rdf:type owl:Class ;
+                       rdfs:subClassOf :AfsluitMiddel ;
+                       rdfs:label "TolKlep"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfsluitMiddel-Zandzakken
+:AfsluitMiddel-Zandzakken rdf:type owl:Class ;
+                          rdfs:subClassOf :AfsluitMiddel ;
+                          rdfs:label "Zandzakken"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/AfvoerCoefficient
+:AfvoerCoefficient rdf:type owl:Class ;
+                   rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                   rdfs:comment "Coëfficiënt die bij de berekening van de afvoer over en door kunstwerken de gevolgen van onvolkomenheden in de schematisatie van de waterbeweging compenseert."@nl ;
+                   rdfs:label "AfvoerCoefficient"@nl ,
+                              "discharge coefficient"@en .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Aquaduct
+:Aquaduct rdf:type owl:Class ;
+          rdfs:subClassOf :Kunstwerk ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                            owl:someValuesFrom :Ruwheid
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                            owl:someValuesFrom :ConstructieHoogte
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                            owl:someValuesFrom :Richting
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                            owl:someValuesFrom :KunstwerkMateriaal
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                            owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                            owl:onClass :OverbruggingsDeel
+                          ] ;
+          rdfs:comment "Een kunstwerk waarmee een waterloop in een open constructie over een weg of andere waterloop wordt gevoerd."@nl ;
+          rdfs:label "Aquaduct"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BalansStuw
+:BalansStuw rdf:type owl:Class ;
+            rdfs:subClassOf :Stuw ;
+            rdfs:comment "Een stuw die middels een contragewicht waterstanden en stroomsnelheden regelt."@nl ;
+            rdfs:label "BalansStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BalgStuw
+:BalgStuw rdf:type owl:Class ;
+          rdfs:subClassOf :Stuw ;
+          rdfs:comment "Een stuw met balgconstructie (rubberen doek bevestigd aan bodem en oevers van watergang)."@nl ;
+          rdfs:label "BalgStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Bekkentrap
+:Bekkentrap rdf:type owl:Class ;
+            rdfs:subClassOf :VisPassage ;
+            rdfs:comment "Een vispassage uitgerust met een serie in het water geplaatste wanden (bekkens), waarmee een vis het peilverschil van het waterniveau kan overbruggen"@nl ;
+            rdfs:label "Bekkentrap"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Bellenscherm
+:Bellenscherm rdf:type owl:Class ;
+              rdfs:subClassOf :VerbeterInstallatie ;
+              rdfs:label "Bellenscherm"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BeverStuw
+:BeverStuw rdf:type owl:Class ;
+           rdfs:subClassOf :Stuw ;
+           rdfs:comment "Een door mensen gemaakte bypass van buizen met een instelbare uitstroomhoogte, gecombineerd met een door bevers aangelegde constructie met stuwende werking."@nl ;
+           rdfs:label "BeverStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BodemBescherming
+:BodemBescherming rdf:type owl:Class ;
+                  rdfs:subClassOf :Kunstwerk ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                    owl:someValuesFrom :StroomvoerendeBreedte
+                                  ] ;
+                  rdfs:comment "Bescherming van de bodem van het kunstwerk die overbelasting van de bodem voorkomt in geval van overslag of overloop van het kunstwerk."@nl ;
+                  rdfs:label "BodemBescherming"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BodemVal
+:BodemVal rdf:type owl:Class ;
+          rdfs:subClassOf :Kunstwerk ;
+          rdfs:comment "Sprong in de bodem van een waterloop."@nl ;
+          rdfs:label "BodemVal"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BoomstamStuw
+:BoomstamStuw rdf:type owl:Class ;
+              rdfs:subClassOf :Stuw ;
+              rdfs:comment "Een stuw constructie bestaande uit opeenstapeling van natuurlijke middelen zoals boomstammen en grote takken."@nl ;
+              rdfs:label "BoomstamStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BreedteOpening
+:BreedteOpening rdf:type owl:Class ;
+                rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                rdfs:comment "De maatgevende (inwendige) breedte van de opening van de constructie."@nl ;
+                rdfs:label "BreedteOpening"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BrievenbusStuw
+:BrievenbusStuw rdf:type owl:Class ;
+                rdfs:subClassOf :Stuw ;
+                rdfs:comment "Een stuw met wandconstructie waarin een sterk doorstroomopening beperkt."@nl ;
+                rdfs:label "BrievenbusStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Brug
+:Brug rdf:type owl:Class ;
+      rdfs:subClassOf :Kunstwerk ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                        owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                        owl:onClass :OverbruggingsDeel
+                      ] ;
+      rdfs:comment "Civielkundige constructie die doorgang verschaft voor voetgangers, dieren, voertuigen en diensten boven obstakels of tussen twee punten op een hoogte boven de grond."@nl ;
+      rdfs:label "Brug"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/BuisbochtStuw
+:BuisbochtStuw rdf:type owl:Class ;
+               rdfs:subClassOf :Stuw ;
+               rdfs:comment "Een stuw met haakse buisbocht, waarbij de hoek van de buisbocht het stuwpeil bepaalt."@nl ;
+               rdfs:label "BuisbochtStuw"@nl .
+
+
 ###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/ConstructieHoogte
 :ConstructieHoogte rdf:type owl:Class ;
-                   rdfs:subClassOf :Hoogte ;
+                   rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
                    rdfs:comment "De maatgevende hoogte van de constructie"@nl ;
                    rdfs:label "ConstructieHoogte"@nl .
 
 
-###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/HoofdFunctieStuw
-:HoofdFunctieStuw rdf:type owl:Class ;
-                  rdfs:subClassOf <https://w3id.org/sulo/Role> ;
-                  rdfs:comment "Aanduiding van de primaire, water-regulerende functie van de stuw."@nl ;
-                  rdfs:label "HoofdFunctieStuw"@nl .
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Coupure
+:Coupure rdf:type owl:Class ;
+         rdfs:subClassOf :Kunstwerk ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                           owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                           owl:onClass :AfsluitMiddel
+                         ] ;
+         rdfs:comment "Coupure"@nl ,
+                      "Een onderbreking in een waterkering voor de doorvoer van een weg of spoorweg, die bij extreme waterstanden afsluitbaar is."@nl .
 
 
-###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Hoogte
-:Hoogte rdf:type owl:Class ;
-        rdfs:subClassOf <https://w3id.org/sulo/Quantity> ,
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Damsluis
+:Damsluis rdf:type owl:Class ;
+          rdfs:subClassOf :Sluis ;
+          rdfs:comment "Een sluis ter afdamming van een watergang, eventueel om land mee te inunderen. Het is een sluis die vrijwel altijd dicht staat. De schotbalksluis is een type damsluis."@nl ;
+          rdfs:label "Damsluis"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Defosfateringsinstallatie
+:Defosfateringsinstallatie rdf:type owl:Class ;
+                           rdfs:subClassOf :VerbeterInstallatie ;
+                           rdfs:label "Defosfateringsinstallatie"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Deniltrap
+:Deniltrap rdf:type owl:Class ;
+           rdfs:subClassOf :VisPassage ;
+           rdfs:comment "Een vispassage in de vorm van een hellend kanaal uitgerust met tussenschotten, waarmee vissen zich van een hoog naar een laag waterniveau kunnen verplaatsen"@nl ;
+           rdfs:label "Deniltrap"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/DoorstroomLengte
+:DoorstroomLengte rdf:type owl:Class ;
+                  rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                  rdfs:label "DoorstroomLengte"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/DoorstroomOpening
+:DoorstroomOpening rdf:type owl:Class ;
+                   rdfs:subClassOf :Kunstwerk ,
+                                   [ rdf:type owl:Restriction ;
+                                     owl:onProperty <https://w3id.org/sulo/isPartOf> ;
+                                     owl:someValuesFrom :Brug
+                                   ] ;
+                   rdfs:label "DoorstroomOpening"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/DrainagePut
+:DrainagePut rdf:type owl:Class ;
+             rdfs:subClassOf :Put ;
+             rdfs:comment "Put voor het verzamelen van drainagewater. (Aquo) Deze putten worden in DAMO geregistreerd met betrekking tot de waterkeringen."@nl ;
+             rdfs:label "DrainagePut"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/DrempelPeil
+:DrempelPeil rdf:type owl:Class ;
+             rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+             rdfs:comment "Het peil in NAP van de drempel van de kering"@nl ;
+             rdfs:label "DrempelPeil"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/DrijverStuw
+:DrijverStuw rdf:type owl:Class ;
+             rdfs:subClassOf :Stuw ;
+             rdfs:comment "Een onafhankelijk functionerende stuw waarbij verschillen evenredig over een gebied verdeeld worden, wanneer het boven- en onderpand een vast peilverschil ten opzichte van elkaar moeten behouden. De stuw drijft met zijn grote drijver op het lage pand en zorgt voor een opwaartse kracht, waardoor de stuwbak in staat is een bepaalde hoeveelheid water te dragen/keren. Het systeem is hierbij in evenwicht."@nl ;
+             rdfs:label "DrijverStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/DuikerSifonHevel
+:DuikerSifonHevel rdf:type owl:Class ;
+                  rdfs:subClassOf :Kunstwerk ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                                    owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                                    owl:onClass :AfsluitMiddel
+                                  ] ;
+                  rdfs:comment "Duiker:Een kokervormige constructie, eventueel met een verhoogd/verlaagd middengedeelte, met als doel de wederzijdse verbinding tussen oppervlaktewater te waarborgen, waarbij in principe de bodem van de waterloop, in tegenstelling tot die van de brug, wordt onderbroken."@nl ;
+                  rdfs:label "Duiker sifon hevel"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/GecombineerdeStuw
+:GecombineerdeStuw rdf:type owl:Class ;
+                   rdfs:subClassOf :Stuw ;
+                   rdfs:comment "Een stuw met meerdere kunstwerkopeningen met verschillende sturingsmogelijkheden en​ waarvan minimaal één van deze openingen is voorzien van een afsluitmiddel"@nl ;
+                   rdfs:label "GecombineerdeStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Gemaal
+:Gemaal rdf:type owl:Class ;
+        rdfs:subClassOf :Kunstwerk ,
                         [ rdf:type owl:Restriction ;
                           owl:onProperty <https://w3id.org/sulo/hasPart> ;
-                          owl:someValuesFrom <https://w3id.org/sulo/Unit>
-                        ] ,
-                        [ rdf:type owl:Restriction ;
-                          owl:onProperty <https://w3id.org/sulo/hasValue> ;
-                          owl:allValuesFrom xsd:float
+                          owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                          owl:onClass :AfsluitMiddel
                         ] ;
-        rdfs:label "Height"@en ,
-                   "Hoogte"@nl .
+        rdfs:label "Gemaal"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/GronddamStuw
+:GronddamStuw rdf:type owl:Class ;
+              rdfs:subClassOf :Stuw ;
+              rdfs:comment "een stuw bestaande uit een vaste constructie gemaakt van grond, die dient om de waterhoogte bovenstrooms te regelen. In deze gronddam is een verlaagd stuk aanwezig, die fungeert als 'overlaat'"@nl ;
+              rdfs:label "GronddamStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/HevelStuw
+:HevelStuw rdf:type owl:Class ;
+           rdfs:subClassOf :Stuw ;
+           rdfs:comment "Een stuw met een verhoogd, kokervormig middengedeelte dat twee wateren met elkaar verbindt"@nl ;
+           rdfs:label "HevelStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/HoogsteDoorstroomHoogte
+:HoogsteDoorstroomHoogte rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                         rdfs:comment "De hoogste doorstroomhoogte van de opening"@nl ;
+                         rdfs:label "HoogsteDoorstroomHoogte"@nl ,
+                                    "Maximum Flow Height"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/HoogsteDoorstroombreedte
+:HoogsteDoorstroombreedte rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                          rdfs:comment "De doorstroombreedte op het niveau van de HoogsteDoorstroomHoogte bij driehoekig of trapezium vorm. Anders de maximale breedte"@nl ;
+                          rdfs:label "Heighest Flow Width"@en ,
+                                     "HoogsteDoorstroombreedte"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/HoogteOpening
+:HoogteOpening rdf:type owl:Class ;
+               rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+               rdfs:comment "De maatgevende (inwendige) hoogte van de opening van het object."@nl ;
+               rdfs:label "HoogteOpening"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/InUitstroomPut
+:InUitstroomPut rdf:type owl:Class ;
+                rdfs:subClassOf :Put ;
+                rdfs:comment "Een waterbouwkundige constructie die gelegen is aan het begin/einde van een duikerconstructie in een oppervlaktewaterlichaam."@nl ;
+                rdfs:label "In-UitstroomPut"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/InlaatSluis
+:InlaatSluis rdf:type owl:Class ;
+             rdfs:subClassOf :Sluis ;
+             rdfs:comment "Een sluis die dient voor aanvoer van water."@nl ;
+             rdfs:label "InlaatSluis"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/InspectiePut
+:InspectiePut rdf:type owl:Class ;
+              rdfs:subClassOf :Put ;
+              rdfs:comment "Een rioolput die voor mens of apparatuur vanaf het maaiveld toegang biedt tot de aangesloten rioolleidingen. (GWSW) Een inspectieput kan ook voorkomen in een lange duiker."@nl ;
+              rdfs:label "InspectiePut"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KantelStuw
+:KantelStuw rdf:type owl:Class ;
+            rdfs:subClassOf :Stuw ;
+            rdfs:comment "Een stuw met klepconstructie waarbij de klep voorzien is van meebewegende zijwangen."@nl ;
+            rdfs:label "KantelStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KeerSluis
+:KeerSluis rdf:type owl:Class ;
+           rdfs:subClassOf :Sluis ;
+           rdfs:comment "Een sluis die het watersysteem en het achter liggende gebied beschermt bij hogere waterstanden."@nl ;
+           rdfs:label "KeerSluis"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KeersluisNaarTweeZijden
+:KeersluisNaarTweeZijden rdf:type owl:Class ;
+                         rdfs:subClassOf :Sluis ;
+                         rdfs:comment "Een sluis die het watersysteem en het achter liggende gebied beschermt bij hogere waterstanden."@nl ;
+                         rdfs:label "Keersluis naar twee zijden"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KeienStuw
+:KeienStuw rdf:type owl:Class ;
+           rdfs:subClassOf :Stuw ;
+           rdfs:comment "Een stuw constructie bestaande uit opeenstapeling van grote natuurstenen keien."@nl ;
+           rdfs:label "KeienStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KerenVanWater
+:KerenVanWater rdf:type owl:Class ;
+               rdfs:subClassOf <https://w3id.org/sulo/Capability> ;
+               rdfs:label "Keren van water"@nl .
 
 
 ###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KerendeHoogte
 :KerendeHoogte rdf:type owl:Class ;
-               rdfs:subClassOf :Hoogte ;
+               rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
                rdfs:comment "Kerende hoogte van het kunstwerk"@nl ;
                rdfs:label "KerendeHoogte"@nl .
 
 
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KlepStuw
+:KlepStuw rdf:type owl:Class ;
+          rdfs:subClassOf :Stuw ;
+          rdfs:comment "Een stuw met een beweegbare, scharnierende klep"@nl ;
+          rdfs:label "KlepStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KruinBreedte
+:KruinBreedte rdf:type owl:Class ;
+              rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+              rdfs:comment "De maatgevende breedte van de stuwconstructie waar het water overheen stroomt in extreme situaties"@nl ;
+              rdfs:label "KruinBreedte"@nl .
+
+
 ###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Kunstwerk
 :Kunstwerk rdf:type owl:Class ;
-           rdfs:subClassOf <https://w3id.org/sulo/SpatialObject> ;
+           rdfs:subClassOf :Object ;
+           owl:disjointWith :Materiaal ;
+           rdfs:isDefinedBy aquo:Id-2ec10971-be51-4223-b448-9d204ebdb6ff ;
            rdfs:label "Kunstwerk"@nl ,
                       "Structure"@en .
 
 
-###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/NevenFunctieStuw
-:NevenFunctieStuw rdf:type owl:Class ;
-                  rdfs:subClassOf <https://w3id.org/sulo/Role> ;
-                  rdfs:comment "Aanduiding van de functie van de stuw die niet water-regulerend is"@nl ;
-                  rdfs:label "NevenFunctieStuw"@nl .
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KunstwerkMateriaal
+:KunstwerkMateriaal rdf:type owl:Class ;
+                    rdfs:subClassOf :Materiaal ;
+                    rdfs:label "KunstwerkMateriaal"@nl ,
+                               "Structure Material"@en .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/KunstwerkOpening
+:KunstwerkOpening rdf:type owl:Class ;
+                  rdfs:subClassOf :Kunstwerk ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                    owl:someValuesFrom :AfvoerCoefficient
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                    owl:someValuesFrom :DoorstroomLengte
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                    owl:someValuesFrom :HoogsteDoorstroomHoogte
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                    owl:someValuesFrom :HoogsteDoorstroombreedte
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                    owl:someValuesFrom :LaagsteDoorstroomHoogte
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                    owl:someValuesFrom :LaagsteDoorstroombreedte
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                                    owl:someValuesFrom :Vorm
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/isPartOf> ;
+                                    owl:someValuesFrom :Stuw
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                                    owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                                    owl:onClass :AfsluitMiddel
+                                  ] ;
+                  rdfs:comment "Een opening in een kunstwerk, met een sturende of peil-regulerende functie."@nl ;
+                  rdfs:label "KunstwerkOpening"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/LaagsteDoorstroomHoogte
+:LaagsteDoorstroomHoogte rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                         rdfs:comment "De laagste doorstroomhoogte van de opening"@nl ;
+                         rdfs:label "LaagsteDoorstroomHoogte"@nl ,
+                                    "Minimum Flow Height"@en .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/LaagsteDoorstroombreedte
+:LaagsteDoorstroombreedte rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                          rdfs:comment "De doorstroombreedte op het niveau van de LaagsteDoorstroomHoogte bij driehoekig of trapezium vorm. Anders de maximale breedte."@nl ;
+                          rdfs:label "LaagsteDoorstroombreedte"@nl ,
+                                     "Lowest Flow Height"@en .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/LokstroomGemaal
+:LokstroomGemaal rdf:type owl:Class ;
+                 rdfs:subClassOf :VisPassage ;
+                 rdfs:comment "Een gemaal met een pomp en een pijp die onderdeel is van een vispassage met als functie het creëren van een lokstroom"@nl ;
+                 rdfs:label "LokstroomGemaal"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Luchtmenginstallatie
+:Luchtmenginstallatie rdf:type owl:Class ;
+                      rdfs:subClassOf :VerbeterInstallatie ;
+                      rdfs:label "Luchtmenginstallatie"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Materiaal
+:Materiaal rdf:type owl:Class ;
+           rdfs:subClassOf <https://w3id.org/sulo/SpatialObject> ;
+           owl:disjointWith :Object ;
+           rdfs:label "Materiaal"@nl ,
+                      "Material"@en .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Menginstallatie
+:Menginstallatie rdf:type owl:Class ;
+                 rdfs:subClassOf :VerbeterInstallatie ;
+                 rdfs:label "Menginstallatie"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Object
+:Object rdf:type owl:Class ;
+        rdfs:subClassOf <https://w3id.org/sulo/SpatialObject> .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OntvangstPut
+:OntvangstPut rdf:type owl:Class ;
+              rdfs:subClassOf :Put ;
+              rdfs:comment "Een put waarop een rioolleiding is aangesloten waarmee het afvalwater het rioolstelsel verlaat naar, of ontvangt uit, een ander rioolstelsel."@nl ;
+              rdfs:label "OntvangstPut"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OntwerpBuitenWaterstand
+:OntwerpBuitenWaterstand rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                         rdfs:comment "Buitenwaterstand waarop het ontwerp van het kunstwerk gebaseerd is."@nl ;
+                         rdfs:label "OntwerpBuitenWaterstand"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OpenKeerPeil
+:OpenKeerPeil rdf:type owl:Class ;
+              rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+              rdfs:comment "Buitenwaterstand welke bij open afsluitmiddel nog juist niet tot een ontoelaatbaar instromend volume buitenwater leidt."@nl ;
+              rdfs:label "OpenKeerPeil"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OpeningsPeil
+:OpeningsPeil rdf:type owl:Class ;
+              rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+              rdfs:comment "Waterstand waarbij, na een hoogwater, de afsluitmiddelen van een waterkering mogen worden geopend."@nl ;
+              rdfs:label "OpeningsPeil"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OverbruggingsDeel
+:OverbruggingsDeel rdf:type owl:Class ;
+                   rdfs:subClassOf :Kunstwerk ,
+                                   [ rdf:type owl:Restriction ;
+                                     owl:onProperty <https://w3id.org/sulo/isPartOf> ;
+                                     owl:someValuesFrom [ rdf:type owl:Class ;
+                                                          owl:unionOf ( :Aquaduct
+                                                                        :Brug
+                                                                      )
+                                                        ]
+                                   ] ;
+                   rdfs:comment "Onderdeel van een beweegbare of vaste verbinding tussen twee punten, die door water, een weg of anderszins gescheiden zijn, dat essentieel is voor de constructie."@nl ;
+                   rdfs:label "OverbruggingsDeel"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OverbruggingsDeel-Dek
+:OverbruggingsDeel-Dek rdf:type owl:Class ;
+                       rdfs:subClassOf :OverbruggingsDeel ;
+                       rdfs:label "Dek"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OverbruggingsDeel-Landhoofd
+:OverbruggingsDeel-Landhoofd rdf:type owl:Class ;
+                             rdfs:subClassOf :OverbruggingsDeel ;
+                             rdfs:label "Landhoofd"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OverbruggingsDeel-Pijler
+:OverbruggingsDeel-Pijler rdf:type owl:Class ;
+                          rdfs:subClassOf :OverbruggingsDeel ;
+                          rdfs:label "Pijler"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OverbruggingsDeel-Pyloon
+:OverbruggingsDeel-Pyloon rdf:type owl:Class ;
+                          rdfs:subClassOf :OverbruggingsDeel ;
+                          rdfs:label "Pyloon"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/OverbruggingsDeel-Sloof
+:OverbruggingsDeel-Sloof rdf:type owl:Class ;
+                         rdfs:subClassOf :OverbruggingsDeel ;
+                         rdfs:label "Sloof"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Peilmerk
+:Peilmerk rdf:type owl:Class ;
+          rdfs:subClassOf :Kunstwerk ;
+          rdfs:comment "Hoogte van een NAP-hoogtemerk in een object, bijvoorbeeld een kunstwerk of inrichtings- element."@nl ;
+          rdfs:label "Peilmerk"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Pomp
+:Pomp rdf:type owl:Class ;
+      rdfs:subClassOf :Kunstwerk ;
+      rdfs:comment "Werktuig dat door middel van een verschil in druk vloeistoffen of gassen verplaatst."@nl ;
+      rdfs:label "Pomp"@nl ,
+                 "Pump"@en .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Put
+:Put rdf:type owl:Class ;
+     rdfs:subClassOf :Kunstwerk ,
+                     [ rdf:type owl:Restriction ;
+                       owl:onProperty <https://w3id.org/sulo/isPartOf> ;
+                       owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                       owl:onClass :DuikerSifonHevel
+                     ] ;
+     rdfs:comment "Verticale waterdichte constructie, toegepast om leidingen aan te sluiten, van richting of niveau te veranderen, om toegang te verschaffen aan personeel en/of apparatuur voor inspectie en onderhoud, en om beluchting en ventilatie mogelijk te maken."@nl ;
+     rdfs:label "Manhole"@en ,
+                "Put"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Regelbaarheid
+:Regelbaarheid rdf:type owl:Class ;
+               rdfs:subClassOf <https://w3id.org/sulo/Capability> ;
+               rdfs:comment "Een aanduiding voor de wijze van regelbaarheid."@nl ;
+               rdfs:label "Adjustability"@en ,
+                          "Regelbaarheid"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/RegulerenWaterhoogte
+:RegulerenWaterhoogte rdf:type owl:Class ;
+                      rdfs:subClassOf <https://w3id.org/sulo/Capability> ;
+                      rdfs:label "RegulerenWaterhoogte"@nl .
 
 
 ###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Richting
@@ -76,6 +825,13 @@
                      "Richting"@nl .
 
 
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/SchotbalkStuw
+:SchotbalkStuw rdf:type owl:Class ;
+               rdfs:subClassOf :Stuw ;
+               rdfs:comment "Een stuw constructie met een sponning waarin schotbalken worden opgestapeld om een gewenste drempelhoogte te bereiken"@nl ;
+               rdfs:label "SchotbalkStuw"@nl .
+
+
 ###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/SchuifStuw
 :SchuifStuw rdf:type owl:Class ;
             rdfs:subClassOf :Stuw ;
@@ -83,40 +839,285 @@
             rdfs:label "SchuifStuw"@nl .
 
 
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/SchutsluisNaarEenZijde
+:SchutsluisNaarEenZijde rdf:type owl:Class ;
+                        rdfs:subClassOf :Sluis ;
+                        rdfs:comment "Een aan weerszijden afsluitbaar kunstwerk waarin door aanpassing van het waterpeil, schepen van het ene op het andere niveau worden gebracht."@nl ;
+                        rdfs:label "Schutsluis naar een zijde"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/SchutsluisNaarTweeZijden
+:SchutsluisNaarTweeZijden rdf:type owl:Class ;
+                          rdfs:subClassOf :Sluis ;
+                          rdfs:label "Schutsluis naar twee zijden"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/SignaleringsPeil
+:SignaleringsPeil rdf:type owl:Class ;
+                  rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                  rdfs:comment "De verwachte of geconstateerde waterstand, waarbij beheerders worden gewaarschuwd en inlichtingen wordt verschaft, opdat tijdig maatregelen kunnen worden genomen."@nl ;
+                  rdfs:label "SignaleringsPeil"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Sluis
+:Sluis rdf:type owl:Class ;
+       rdfs:subClassOf :Kunstwerk ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                         owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                         owl:onClass :AfsluitMiddel
+                       ] .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/SluitPeil
+:SluitPeil rdf:type owl:Class ;
+           rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+           rdfs:comment "De waterstand, waarbij de kering wordt gesloten."@nl ;
+           rdfs:label "SluitPeil"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/StraatKolk
+:StraatKolk rdf:type owl:Class ;
+            rdfs:subClassOf :Put ;
+            rdfs:comment "Een reservoir bestemd voor de opvang van hemelwater afkomstig van erop aangesloten oppervlakken, het laten bezinken van in dit water meegevoerde bezinkbare stoffen en de afvoer van dit water naar een rioolstelsel of naar de ondergrond."@nl ;
+            rdfs:label "StraatKolk"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/StroomvoerendeBreedte
+:StroomvoerendeBreedte rdf:type owl:Class ;
+                       rdfs:subClassOf <https://w3id.org/sulo/Quantity> ;
+                       rdfs:comment "De gemiddelde breedte van de bodembescherming in het kunstwerk die bij een bepaald peil beschikbaar is voor de rivierafvoer."@nl ;
+                       rdfs:label "StroomvoerendeBreedte"@nl .
+
+
 ###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Stuw
 :Stuw rdf:type owl:Class ;
       rdfs:subClassOf :Kunstwerk ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty <https://w3id.org/sulo/hasFeature> ;
-                        owl:someValuesFrom :WaterstandRegulatieVermogen
+                        owl:someValuesFrom :AantalKunstwerkopeningen
                       ] ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty <https://w3id.org/sulo/hasFeature> ;
-                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                        owl:onClass :ConstructieHoogte
+                        owl:someValuesFrom :AfvoerCoefficient
                       ] ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty <https://w3id.org/sulo/hasFeature> ;
-                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                        owl:onClass :HoofdFunctieStuw
+                        owl:someValuesFrom :ConstructieHoogte
                       ] ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty <https://w3id.org/sulo/hasFeature> ;
-                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                        owl:onClass :KerendeHoogte
+                        owl:someValuesFrom :DrempelPeil
                       ] ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty <https://w3id.org/sulo/hasFeature> ;
-                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                        owl:onClass :NevenFunctieStuw
+                        owl:someValuesFrom :KerendeHoogte
                       ] ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty <https://w3id.org/sulo/hasFeature> ;
-                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                        owl:onClass :Richting
+                        owl:someValuesFrom :KruinBreedte
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:someValuesFrom :OntwerpBuitenWaterstand
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:someValuesFrom :OpenKeerPeil
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:someValuesFrom :OpeningsPeil
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:someValuesFrom :RegulerenWaterhoogte
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:someValuesFrom :Richting
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:someValuesFrom :SignaleringsPeil
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                        owl:someValuesFrom :SluitPeil
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                        owl:someValuesFrom :KunstwerkMateriaal
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                        owl:someValuesFrom :KunstwerkOpening
                       ] ;
+      rdfs:comment "Vaste of beweegbare constructie in het water die dient om de waterhoogte bovenstrooms en/of benedenstrooms van de constructie te regelen."@nl ;
       rdfs:label "DamOrWeir"@en ,
                  "Stuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Tunnel
+:Tunnel rdf:type owl:Class ;
+        rdfs:subClassOf :Kunstwerk ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :BreedteOpening
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :DrempelPeil
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :KerendeHoogte
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :OntwerpBuitenWaterstand
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :OpenKeerPeil
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :OpeningsPeil
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :SignaleringsPeil
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :SluitPeil
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                          owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                          owl:onClass :AfsluitMiddel
+                        ] ;
+        rdfs:comment "Ondergrondse of onder water gelegen verbinding tussen twee punten, aan beide einden voorzien van een open bakconstructie."@nl ;
+        rdfs:label "Tunnel"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/UitwateringsSluisOfSpuisluis
+:UitwateringsSluisOfSpuisluis rdf:type owl:Class ;
+                              rdfs:subClassOf :Sluis ;
+                              rdfs:comment "Een sluis die te veel aan water op het binnenwater gereguleerd naar een lagergelegen buitenwater laat afvloeien (spuien) en buitenwater keert."@nl ;
+                              rdfs:label "UitwateringsSluis/Spuisluis"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Ultrasooninstallatie
+:Ultrasooninstallatie rdf:type owl:Class ;
+                      rdfs:subClassOf :VerbeterInstallatie ;
+                      rdfs:label "Ultrasooninstallatie"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/VasteDam
+:VasteDam rdf:type owl:Class ;
+          rdfs:subClassOf :Kunstwerk ;
+          rdfs:comment "Dwars door een water gelegen afsluiting, bedoeld om water te keren of te beheersen."@nl ;
+          rdfs:label "VasteDam"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/VasteStuw
+:VasteStuw rdf:type owl:Class ;
+           rdfs:subClassOf :Stuw ;
+           rdfs:comment "Een stuw uitgevoerd als vaste constructie met een onveranderlijke drempelhoogte"@nl ;
+           rdfs:label "VasteStuw"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/VerbeterInstallatie
+:VerbeterInstallatie rdf:type owl:Class ;
+                     rdfs:subClassOf :Kunstwerk ;
+                     rdfs:comment "Een installatie die dient ter verbetering van de waterkwaliteit."@nl ;
+                     rdfs:label "VerbeterInstallatie"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/VisLift
+:VisLift rdf:type owl:Class ;
+         rdfs:subClassOf :VisPassage ;
+         rdfs:comment "Een vispassage in de vorm van een spiraal met opeenvolgende kamers, waarbinnen vissen zich met behulp van een waterstroom kunnen verplaatsen"@nl ;
+         rdfs:label "Vislift"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/VisPassage
+:VisPassage rdf:type owl:Class ;
+            rdfs:subClassOf :Kunstwerk ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                              owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                              owl:onClass :AfsluitMiddel
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty <https://w3id.org/sulo/isPartOf> ;
+                              owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                              owl:onClass :Waterkering
+                            ] ;
+            rdfs:comment "Een kunstmatige passage ten behoeve van de vistrek bij kunstwerken in wateren"@nl ;
+            rdfs:label "VisPassage"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/VisTrap
+:VisTrap rdf:type owl:Class ;
+         rdfs:subClassOf :VisPassage ;
+         rdfs:comment "Een vispassage waarmee vissen zich stapsgewijs van het ene naar het andere waterniveau kunnen verplaatsen"@nl ;
+         rdfs:label "Vistrap"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Vissluis
+:Vissluis rdf:type owl:Class ;
+          rdfs:subClassOf :VisPassage ;
+          rdfs:comment "Een vispassage die aan weerszijden afsluitbaar is met een schuif, waarbij één schuif deels geopend is om een waterstroom te creëren en de andere schuif volledig is geopend, zodat een vis zich er door heen kan verplaatsen"@nl ;
+          rdfs:label "Vissluis"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Voorde
+:Voorde rdf:type owl:Class ;
+        rdfs:subClassOf :Kunstwerk ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                          owl:someValuesFrom :Richting
+                        ] ;
+        rdfs:comment "Een doorwaadbare, doorgaans verharde, plaats in de waterloop, die dient voor de oversteek van die waterloop."@nl ;
+        rdfs:label "Voorde"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Vorm
+:Vorm rdf:type owl:Class ;
+      rdfs:subClassOf <https://w3id.org/sulo/Quality> ;
+      rdfs:label "Shape"@en ,
+                 "Vorm"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Vuilvang
+:Vuilvang rdf:type owl:Class ;
+          rdfs:subClassOf :Kunstwerk ;
+          rdfs:comment "Een voorziening om de waterloop dan wel één of meerdere objecten benedenstrooms te vrijwaren van drijvend vuil en dergelijke"@nl ;
+          rdfs:label "Vuilvang"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Waterkering
+:Waterkering rdf:type owl:Class ;
+             rdfs:subClassOf :Object ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty <https://w3id.org/sulo/hasPart> ;
+                               owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                               owl:onClass [ rdf:type owl:Class ;
+                                             owl:unionOf ( :Coupure
+                                                           :DuikerSifonHevel
+                                                           :Gemaal
+                                                           :Sluis
+                                                           :Stuw
+                                                           :Tunnel
+                                                           :VisPassage
+                                                         )
+                                           ]
+                             ] ;
+             rdfs:comment "Kunstmatige hoogte, natuurlijke hoogte of gedeelte daarvan, of hoge gronden met ondersteunende kunstwerken, die een waterkerende of mede een waterkerende functie hebben."@nl ;
+             rdfs:label "Waterkering"@nl .
 
 
 ###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/WaterstandRegulatieVermogen
@@ -124,6 +1125,17 @@
                              rdfs:subClassOf <https://w3id.org/sulo/Capability> ;
                              rdfs:comment "Het actief beïnvloeden van de hoogte van het wateroppervlak."@nl ;
                              rdfs:label "WaterstandRegulatieVermogen"@nl .
+
+
+###  http://www.semanticweb.org/daan/ontologies/2025/2/DAMO-SULO/Zandvang
+:Zandvang rdf:type owl:Class ;
+          rdfs:subClassOf :Kunstwerk ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty <https://w3id.org/sulo/hasFeature> ;
+                            owl:someValuesFrom :Richting
+                          ] ;
+          rdfs:comment "Inrichting in een waterloop die dient om het door het water meegevoerde zand te laten bezinken."@nl ;
+          rdfs:label "Zandvang"@nl .
 
 
 #################################################################
@@ -135,6 +1147,140 @@
                <https://w3id.org/sulo/Unit> ;
       rdfs:comment "De hoogte in meters ten opzichte van NAP" ;
       rdfs:label "m+NAP" .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Aalpijp
+                :Bekkentrap
+                :Deniltrap
+                :LokstroomGemaal
+                :VisLift
+                :VisTrap
+                :Vissluis
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :AfsluitMiddel
+                :Aquaduct
+                :BodemBescherming
+                :BodemVal
+                :Brug
+                :Coupure
+                :DoorstroomOpening
+                :DuikerSifonHevel
+                :Gemaal
+                :KunstwerkOpening
+                :OverbruggingsDeel
+                :Peilmerk
+                :Pomp
+                :Put
+                :Sluis
+                :Stuw
+                :Tunnel
+                :VasteDam
+                :VerbeterInstallatie
+                :VisPassage
+                :Voorde
+                :Vuilvang
+                :Zandvang
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :AfsluitMiddel
+                :Coupure
+                :DuikerSifonHevel
+                :Gemaal
+                :Sluis
+                :Stuw
+                :Tunnel
+                :VisPassage
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :AfsluitMiddel-Balg
+                :AfsluitMiddel-Deur
+                :AfsluitMiddel-Overig
+                :AfsluitMiddel-Schotbalk
+                :AfsluitMiddel-Schuif
+                :AfsluitMiddel-StuwKlep
+                :AfsluitMiddel-TerugslagKlep
+                :AfsluitMiddel-TolKlep
+                :AfsluitMiddel-Zandzakken
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :BalansStuw
+                :BalgStuw
+                :BeverStuw
+                :BoomstamStuw
+                :BrievenbusStuw
+                :BuisbochtStuw
+                :DrijverStuw
+                :GecombineerdeStuw
+                :GronddamStuw
+                :HevelStuw
+                :KantelStuw
+                :KeienStuw
+                :KlepStuw
+                :SchotbalkStuw
+                :SchuifStuw
+                :VasteStuw
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Bellenscherm
+                :Defosfateringsinstallatie
+                :Luchtmenginstallatie
+                :Menginstallatie
+                :Ultrasooninstallatie
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Damsluis
+                :InlaatSluis
+                :KeerSluis
+                :KeersluisNaarTweeZijden
+                :SchutsluisNaarEenZijde
+                :SchutsluisNaarTweeZijden
+                :UitwateringsSluisOfSpuisluis
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :DrainagePut
+                :InUitstroomPut
+                :InspectiePut
+                :OntvangstPut
+                :StraatKolk
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :OverbruggingsDeel-Dek
+                :OverbruggingsDeel-Landhoofd
+                :OverbruggingsDeel-Pijler
+                :OverbruggingsDeel-Pyloon
+                :OverbruggingsDeel-Sloof
+              )
+] .
 
 
 ###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
